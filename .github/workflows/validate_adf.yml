@@ -13,6 +13,7 @@ jobs:
         with:
           node-version: 18.0 
           cache: 'npm'
+          cache-dependency-path: /home/runner/work/data-factory/data-factory/package-lock.json
       - uses: actions/checkout@v4
       - name: Validate Data Factory resources
         uses: Azure/data-factory-validate-action@v1.1.5
