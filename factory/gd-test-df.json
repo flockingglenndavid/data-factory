@@ -4,7 +4,7 @@
 		"globalParameters": {
 			"Environment": {
 				"type": "string",
-				"value": "DEV"
+				"value": "DEVELOPMENT"
 			}
 		}
 	},
