@@ -1,0 +1,9 @@
+{
+	"name": "gd-test-df",
+	"location": "australiaeast",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "6f1694de-53e0-4b08-a340-d71003eac2e9",
+		"tenantId": "b48a16f6-37d5-4555-999c-82459f1cea18"
+	}
+}
