@@ -1,5 +1,13 @@
 {
 	"name": "gd-test-df",
+	"properties": {
+		"globalParameters": {
+			"Environment": {
+				"type": "string",
+				"value": "DEV"
+			}
+		}
+	},
 	"location": "australiaeast",
 	"identity": {
 		"type": "SystemAssigned",
