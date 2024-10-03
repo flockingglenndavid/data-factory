@@ -1,0 +1,17 @@
+name: ValidateADF
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  validate_adf:
+    runs-on: ubuntu-latest
+    steps:      
+      - uses: actions/checkout@v3
+      - name: Validate Data Factory resources
+        uses: Azure/data-factory-validate-action@v1.1.5
+        with:
+          path: ./
+          id: /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/gd-test-asa-rg/providers/Microsoft.DataFactory/factories/gd-test-df
