@@ -1,0 +1,95 @@
+name: Deploy ADF
+run-name: Deploy ${{ inputs.data_factory }}
+
+on:
+  workflow_call:
+    inputs:
+      resource_group:
+        description: 'Name of resource group that contains the ADF'
+        required: true
+        default: 'rsg-demo-dev'
+        type: string
+      data_factory:
+        description: 'Name of ADF'
+        required: true
+        default: 'adf-aurai-dev'
+        type: string
+      pause_triggers:
+        description: 'Pause all triggers before publishing.'
+        required: false
+        default: false
+        type: boolean
+      overwrite_references:
+        description: 'Use env_mappings.json to overwrite environment specific references.'
+        required: false
+        default: false
+        type: boolean
+    secrets:
+      client_id:
+        description: 'Client ID of the SPN used to login to azure using OIDC'
+        required: true
+      tenant_id:
+        description: 'Azure Active Directory Tenant ID'
+        required: true
+      subscription_id:
+        description: 'Subscription ID of the subscription containing the ADF'
+        required: true
+permissions:
+  id-token: write
+  contents: read
+  
+jobs:
+  deploy_adf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Pause all triggers
+        if: ${{ inputs.pause_triggers }}
+        run: |
+          echo "Pausing all triggers"
+          for file in ./trigger/*
+          do
+            jq '.properties.runtimeState="Stopped"' $file | tee trigger/temp.json >/dev/null
+            mv trigger/temp.json $file
+            echo "Set trigger runtimeState to 'Stopped' for $file"
+          done
+      - name: Export ARM Template
+        id: export
+        uses: Azure/data-factory-export-action@v1.2.1
+        with:
+          path: ./
+          id: /subscriptions/${{ secrets.subscription_id }}/resourceGroups/${{ inputs.resource_group }}/providers/Microsoft.DataFactory/factories/${{ inputs.data_factory }}
+      - name: Overwrite references in ARM Template
+        if: ${{ inputs.overwrite_references }}
+        run: |
+          echo "Start overwriting references in ARMTemplateForFactory.json and ARMTemplateParametersForFactory.json using the mappings in env_mappings.json"
+          jq -c 'to_entries[]' env_mappings.json | while read line; do 
+              old=$( jq -r '.key' <<< "$line" )
+              new=$( jq -r '.value' <<< "$line" )
+              echo "Replace $old by $new"
+              sed -i "s|$old|$new|g" ${{ steps.export.outputs.arm-template-directory }}/ARMTemplateForFactory.json
+              sed -i "s|$old|$new|g" ${{ steps.export.outputs.arm-template-directory }}/ARMTemplateParametersForFactory.json
+          done
+      - name: Publish ARM template
+        uses: actions/upload-artifact@v2
+        with:
+          name: adf-artifact
+          path: ${{ steps.export.outputs.arm-template-directory }}
+          if-no-files-found: error    
+      - name: Copy ARM Template to root
+        run: cp -a armTemplate/. . 
+      - name: AZ OIDC login
+        uses: azure/login@v1
+        with:
+            client-id: ${{ secrets.client_id }}
+            tenant-id: ${{ secrets.tenant_id }}
+            subscription-id: ${{ secrets.subscription_id }}
+            enable-AzPSSession: true      
+      - name: Add datafactory extension to AZ CLI
+        run: az extension add --name datafactory
+      - name: Deploy resources
+        uses: Azure/data-factory-deploy-action@v1.2.0
+        with:
+          resourceGroupName: ${{ inputs.resource_group }}
+          dataFactoryName: ${{ inputs.data_factory }}
+          armTemplateFile: ARMTemplateForFactory.json
