@@ -79,7 +79,7 @@ jobs:
       - name: Copy ARM Template to root
         run: cp -a armTemplate/. . 
       - name: AZ OIDC login
-        uses: azure/login@v2
+        uses: azure/login@v1
         with:
             client-id: ${{ secrets.client_id }}
             tenant-id: ${{ secrets.tenant_id }}
