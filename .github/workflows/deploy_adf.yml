@@ -85,6 +85,7 @@ jobs:
             tenant-id: ${{ secrets.tenant_id }}
             subscription-id: ${{ secrets.subscription_id }}
             enable-AzPSSession: true
+            auth-type: IDENTITY
       - name: Add datafactory extension to AZ CLI
         run: az extension add --name datafactory
       - name: Deploy resources
