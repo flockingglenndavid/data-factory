@@ -71,7 +71,7 @@ jobs:
               sed -i "s|$old|$new|g" ${{ steps.export.outputs.arm-template-directory }}/ARMTemplateParametersForFactory.json
           done
       - name: Publish ARM template
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: adf-artifact
           path: ${{ steps.export.outputs.arm-template-directory }}
