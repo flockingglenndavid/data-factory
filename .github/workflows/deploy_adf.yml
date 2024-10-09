@@ -86,6 +86,7 @@ jobs:
             subscription-id: ${{ secrets.subscription_id }}
             enable-AzPSSession: true
             auth-type: IDENTITY
+            audience: api://AzureADTokenExchange
       - name: Add datafactory extension to AZ CLI
         run: az extension add --name datafactory
       - name: Deploy resources
