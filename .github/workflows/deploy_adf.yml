@@ -7,12 +7,12 @@ on:
       resource_group:
         description: 'Name of resource group that contains the ADF'
         required: true
-        default: 'rsg-demo-dev'
+        default: 'gd-test-asa-rg'
         type: string
       data_factory:
         description: 'Name of ADF'
         required: true
-        default: 'adf-aurai-dev'
+        default: 'gd-test-df'
         type: string
       pause_triggers:
         description: 'Pause all triggers before publishing.'
