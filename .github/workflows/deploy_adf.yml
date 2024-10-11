@@ -59,6 +59,11 @@ jobs:
         with:
           path: ./
           id: /subscriptions/${{ secrets.subscription_id }}/resourceGroups/${{ inputs.resource_group }}/providers/Microsoft.DataFactory/factories/${{ inputs.data_factory }}
+      - name: Set permissions
+        if: ${{ inputs.overwrite_references }}
+        run: |
+          chmod -R 755 ${{ steps.export.outputs.arm-template-directory }}
+          chmod 644 ${{ steps.export.outputs.arm-template-directory }}/*.json
       - name: Overwrite references in ARM Template
         if: ${{ inputs.overwrite_references }}
         run: |
@@ -68,8 +73,8 @@ jobs:
               old=$( jq -r '.key' <<< "$line" )
               new=$( jq -r '.value' <<< "$line" )
               echo "Replace $old by $new"
-              sed "s|$old|$new|g" ${{ steps.export.outputs.arm-template-directory }}/ARMTemplateForFactory.json > ${{ steps.export.outputs.arm-template-directory }}/ARMTemplateForFactory.json
-              sed "s|$old|$new|g" ${{ steps.export.outputs.arm-template-directory }}/ARMTemplateParametersForFactory.json > ${{ steps.export.outputs.arm-template-directory }}/ARMTemplateParametersForFactory.json
+              sed -i "s|$old|$new|g" ${{ steps.export.outputs.arm-template-directory }}/ARMTemplateForFactory.json
+              sed -i "s|$old|$new|g" ${{ steps.export.outputs.arm-template-directory }}/ARMTemplateParametersForFactory.json
           done
           
       - name: Publish ARM template
