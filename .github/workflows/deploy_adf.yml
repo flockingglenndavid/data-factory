@@ -59,8 +59,10 @@ jobs:
         with:
           path: ./
           id: /subscriptions/${{ secrets.subscription_id }}/resourceGroups/${{ inputs.resource_group }}/providers/Microsoft.DataFactory/factories/${{ inputs.data_factory }}
-      - name: Make files writable
-        run: git update-index --chmod=+x ./armTemplate/*
+      - name: Set permissions
+        run: |
+          chmod -R 755 ./armTemplate
+          chmod 644 ./armTemplate/*.json
       - name: Overwrite references in ARM Template
         if: ${{ inputs.overwrite_references }}
         run: |
