@@ -36,7 +36,7 @@ on:
         required: true
 permissions:
   id-token: write
-  contents: read
+  contents: write
   
 jobs:
   deploy_adf:
@@ -70,6 +70,7 @@ jobs:
               sed "s|$old|$new|g" ${{ steps.export.outputs.arm-template-directory }}/ARMTemplateForFactory.json > ${{ steps.export.outputs.arm-template-directory }}/ARMTemplateForFactory.json
               sed "s|$old|$new|g" ${{ steps.export.outputs.arm-template-directory }}/ARMTemplateParametersForFactory.json > ${{ steps.export.outputs.arm-template-directory }}/ARMTemplateParametersForFactory.json
           done
+          
       - name: Publish ARM template
         uses: actions/upload-artifact@v4
         with:
