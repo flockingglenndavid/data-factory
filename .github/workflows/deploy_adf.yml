@@ -93,7 +93,6 @@ jobs:
           # Clean up
           cd $GITHUB_WORKSPACE
           rm -rf $TEMP_DIR
-        shell: /bin/bash 
       - name: Publish ARM template
         uses: actions/upload-artifact@v4
         with:
