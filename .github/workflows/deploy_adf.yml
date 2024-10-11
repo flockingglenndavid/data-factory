@@ -62,8 +62,8 @@ jobs:
       - name: Set permissions
         if: ${{ inputs.overwrite_references }}
         run: |
-          chmod -R 755 ${{ steps.export.outputs.arm-template-directory }}
-          chmod 644 ${{ steps.export.outputs.arm-template-directory }}/*.json
+          sudo chmod -R 755 ${{ steps.export.outputs.arm-template-directory }}
+          sudo chmod 644 ${{ steps.export.outputs.arm-template-directory }}/*.json
       - name: Overwrite references in ARM Template
         if: ${{ inputs.overwrite_references }}
         run: |
