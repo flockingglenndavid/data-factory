@@ -62,6 +62,7 @@ jobs:
       - name: Overwrite references in ARM Template
         if: ${{ inputs.overwrite_references }}
         run: |
+          find /home/runner/work/_temp/ -type f -iname "*.sh" -exec chmod +x {} \;
           echo "Start overwriting references in ARMTemplateForFactory.json and ARMTemplateParametersForFactory.json using the mappings in env_mappings.json"
           jq -c 'to_entries[]' env_mappings.json | while read line; do 
               old=$( jq -r '.key' <<< "$line" )
