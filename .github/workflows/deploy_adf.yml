@@ -59,22 +59,20 @@ jobs:
         with:
           path: ./
           id: /subscriptions/${{ secrets.subscription_id }}/resourceGroups/${{ inputs.resource_group }}/providers/Microsoft.DataFactory/factories/${{ inputs.data_factory }}
-      - name: Set permissions
-        if: ${{ inputs.overwrite_references }}
-        run: |
-          sudo chmod -R 755 ${{ steps.export.outputs.arm-template-directory }}
-          sudo chmod 644 ${{ steps.export.outputs.arm-template-directory }}/*.json
+      - name: Make files writable
+        run: git update-index --chmod=+x ./armTemplate/*
       - name: Overwrite references in ARM Template
         if: ${{ inputs.overwrite_references }}
         run: |
-          find /home/runner/work/_temp/ -type f -iname "*.sh" -exec chmod +x {} \;
           echo "Start overwriting references in ARMTemplateForFactory.json and ARMTemplateParametersForFactory.json using the mappings in env_mappings.json"
           jq -c 'to_entries[]' env_mappings.json | while read line; do 
               old=$( jq -r '.key' <<< "$line" )
               new=$( jq -r '.value' <<< "$line" )
               echo "Replace $old by $new"
-              sed -i "s|$old|$new|g" ${{ steps.export.outputs.arm-template-directory }}/ARMTemplateForFactory.json
-              sed -i "s|$old|$new|g" ${{ steps.export.outputs.arm-template-directory }}/ARMTemplateParametersForFactory.json
+              sed "s|$old|$new|g" ./armTemplate/ARMTemplateForFactory.json > ./armTemplate/ARMTemplateForFactory.json.tmp
+              mv ./armTemplate/ARMTemplateForFactory.json.tmp ./armTemplate/ARMTemplateForFactory.json
+              sed "s|$old|$new|g" ./armTemplate/ARMTemplateParametersForFactory.json > ./armTemplate/ARMTemplateParametersForFactory.json.tmp
+              mv ./armTemplate/ARMTemplateParametersForFactory.json.tmp ./armTemplate/ARMTemplateParametersForFactory.json
           done
           
       - name: Publish ARM template
