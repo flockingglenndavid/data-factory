@@ -1,7 +1,11 @@
 name: ReleaseToProd
 on:
-  workflow_dispatch:
-  
+    workflow_dispatch:
+      inputs:
+        environment:
+          description: 'Target environment'
+          required: true
+          default: 'production'
 permissions:
   id-token: write
   contents: write
