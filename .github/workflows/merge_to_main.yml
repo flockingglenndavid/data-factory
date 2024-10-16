@@ -13,6 +13,7 @@ jobs:
     with:
       resource_group: 'gd-test-asa-rg'
       data_factory: 'gd-test-df'
+      target_data_factory: 'gd-test-df'
       pause_triggers: false
       overwrite_references: false
     secrets:
