@@ -90,8 +90,8 @@ jobs:
           
           # Copy modified files back to original location
           echo "Copy modified files back to original location"
-          cp ARMTemplateForFactory.json ./armTemplate//ARMTemplateForFactory.json
-          cp ARMTemplateParametersForFactory.json ./armTemplate/ARMTemplateForFactory.json
+          cp ARMTemplateForFactory.json ./armTemplate/
+          cp ARMTemplateParametersForFactory.json ./armTemplate/
           
           # Clean up
           cd $GITHUB_WORKSPACE
