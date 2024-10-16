@@ -9,6 +9,11 @@ on:
         required: true
         default: 'gd-test-asa-rg'
         type: string
+      target_data_factory:
+        description: 'Name of new data factory'
+        required: true
+        default: 'gd-test-df'
+        type: string
       data_factory:
         description: 'Name of ADF'
         required: true
@@ -91,5 +96,5 @@ jobs:
         uses: Azure/data-factory-deploy-action@v1.2.0
         with:
           resourceGroupName: ${{ inputs.resource_group }}
-          dataFactoryName: ${{ inputs.data_factory }}
+          dataFactoryName: ${{ inputs.target_data_factory }}
           armTemplateFile: ARMTemplateForFactory.json
