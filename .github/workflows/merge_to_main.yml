@@ -11,6 +11,7 @@ jobs:
     name: DeployToDev
     uses: ./.github/workflows/deploy_adf.yml
     with:
+      target_resource_group: 'gd-test-asa-rg'
       resource_group: 'gd-test-asa-rg'
       data_factory: 'gd-test-df'
       target_data_factory: 'gd-test-df'
