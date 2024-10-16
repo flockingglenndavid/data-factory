@@ -77,6 +77,8 @@ jobs:
           cp env_mappings.json $TEMP_DIR/
           
           # Change to the temporary directory
+          echo 'Change to the temporary directory'
+          echo $TEMP_DIR
           cd $TEMP_DIR
           
           echo "Start overwriting references in ARMTemplateForFactory.json and ARMTemplateParametersForFactory.json using the mappings in env_mappings.json"
@@ -90,11 +92,11 @@ jobs:
           
           # Copy modified files back to original location
           echo "Copy modified files back to original location"
-          cp ARMTemplateForFactory.json ./armTemplate/
-          cp ARMTemplateParametersForFactory.json ./armTemplate/
+          cd $GITHUB_WORKSPACE
+          cp $TEMP_DIR/ARMTemplateForFactory.json armTemplate/
+          cp $TEMP_DIR/ARMTemplateParametersForFactory.json armTemplate/
           
           # Clean up
-          cd $GITHUB_WORKSPACE
           rm -rf $TEMP_DIR
       - name: Publish ARM template
         uses: actions/upload-artifact@v4
