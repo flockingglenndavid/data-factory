@@ -1,4 +1,4 @@
-name: MergeToMain
+name: ReleaseToProd
 on:
   workflow_dispatch:
   
