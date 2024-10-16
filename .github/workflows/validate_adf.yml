@@ -9,9 +9,9 @@ jobs:
   validate_adf:
     runs-on: ubuntu-latest
     steps:      
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Validate Data Factory resources
-        uses: Azure/data-factory-validate-action@v1.1.5
+        uses: Azure/data-factory-validate-action@v1.1.6
         with:
           path: ./
           id: /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/gd-test-asa-rg/providers/Microsoft.DataFactory/factories/gd-test-df
