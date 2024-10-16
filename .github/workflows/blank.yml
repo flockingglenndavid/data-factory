@@ -1,0 +1,21 @@
+name: MergeToMain
+on:
+  workflow_dispatch:
+  
+permissions:
+  id-token: write
+  contents: write
+jobs:
+  deploy_prod:
+    needs: deploy_dev
+    name: DeployToPROD
+    uses: ./.github/workflows/deploy_adf.yml
+    with:
+      resource_group: 'gd-test-asa-rg'
+      data_factory: 'gd-prod-df'
+      pause_triggers: false
+      overwrite_references: true
+    secrets:
+      client_id: ${{ secrets.AZURE_CLIENT_ID }}
+      tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+      subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
