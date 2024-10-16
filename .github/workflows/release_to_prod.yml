@@ -19,7 +19,7 @@ jobs:
       target_data_factory: 'gd-prod-df'
       target_resource_group: 'gd-test-asa-rg'
       pause_triggers: false
-      overwrite_references: false
+      overwrite_references: true
     secrets:
       client_id: ${{ secrets.AZURE_CLIENT_ID }}
       tenant_id: ${{ secrets.AZURE_TENANT_ID }}
