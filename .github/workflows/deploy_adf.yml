@@ -4,6 +4,11 @@ run-name: Deploy ${{ inputs.data_factory }}
 on:
   workflow_call:
     inputs:
+      target_resource_group:
+        description: 'Name of resource group that will contain the new ADF'
+        required: true
+        default: 'gd-test-asa-rg'
+        type: string
       resource_group:
         description: 'Name of resource group that contains the ADF'
         required: true
@@ -95,6 +100,6 @@ jobs:
       - name: Deploy resources
         uses: Azure/data-factory-deploy-action@v1.2.0
         with:
-          resourceGroupName: ${{ inputs.resource_group }}
+          resourceGroupName: ${{ inputs.target_resource_group }}
           dataFactoryName: ${{ inputs.target_data_factory }}
           armTemplateFile: ARMTemplateForFactory.json
