@@ -56,9 +56,9 @@ jobs:
       - name: Export ARM Template
         id: export
         uses: Azure/data-factory-export-action@v1.2.1
-        with:
-          path: ./
-          id: /subscriptions/${{ secrets.subscription_id }}/resourceGroups/${{ inputs.resource_group }}/providers/Microsoft.DataFactory/factories/${{ inputs.data_factory }}
+        #with:
+        #  path: ./
+        #  id: /subscriptions/${{ secrets.subscription_id }}/resourceGroups/${{ inputs.resource_group }}/providers/Microsoft.DataFactory/factories/${{ inputs.data_factory }}
       - name: Overwrite references in ARM Template
         if: ${{ inputs.overwrite_references }}
         run: |
