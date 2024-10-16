@@ -1,5 +1,5 @@
 name: Deploy ADF
-run-name: Deploy ${{ inputs.data_factory }}
+run-name: Deploy ${{ inputs.data_factory }} to ${{ inputs.target_data_factory }}
 
 on:
   workflow_call:
