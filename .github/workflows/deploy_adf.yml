@@ -59,45 +59,17 @@ jobs:
         with:
           path: ./
           id: /subscriptions/${{ secrets.subscription_id }}/resourceGroups/${{ inputs.resource_group }}/providers/Microsoft.DataFactory/factories/${{ inputs.data_factory }}
-      - name: Set permissions
-        run: |
-          sudo chmod -R 755 ./armTemplate
-          sudo chmod 644 ./armTemplate/*.json
       - name: Overwrite references in ARM Template
         if: ${{ inputs.overwrite_references }}
         run: |
-          # Create a temporary directory
-          echo "Create a temporary directory"
-          TEMP_DIR=$(mktemp -d)
-          
-          # Copy files to temporary directory
-          echo "Copy files to temporary directory"
-          cp ./armTemplate/ARMTemplateForFactory.json $TEMP_DIR/
-          cp ./armTemplate/ARMTemplateParametersForFactory.json $TEMP_DIR/
-          cp env_mappings.json $TEMP_DIR/
-          
-          # Change to the temporary directory
-          echo 'Change to the temporary directory'
-          echo $TEMP_DIR
-          cd $TEMP_DIR
-          
           echo "Start overwriting references in ARMTemplateForFactory.json and ARMTemplateParametersForFactory.json using the mappings in env_mappings.json"
           jq -c 'to_entries[]' env_mappings.json | while read line; do 
               old=$( jq -r '.key' <<< "$line" )
               new=$( jq -r '.value' <<< "$line" )
               echo "Replace $old by $new"
-              sed -i "s|$old|$new|g" ARMTemplateForFactory.json
-              sed -i "s|$old|$new|g" ARMTemplateParametersForFactory.json
+              sed -i "s|$old|$new|g" ${{ steps.export.outputs.arm-template-directory }}/ARMTemplateForFactory.json
+              sed -i "s|$old|$new|g" ${{ steps.export.outputs.arm-template-directory }}/ARMTemplateParametersForFactory.json
           done
-          
-          # Copy modified files back to original location
-          echo "Copy modified files back to original location"
-          cd $GITHUB_WORKSPACE
-          cp $TEMP_DIR/ARMTemplateForFactory.json armTemplate/
-          cp $TEMP_DIR/ARMTemplateParametersForFactory.json armTemplate/
-          
-          # Clean up
-          rm -rf $TEMP_DIR
       - name: Publish ARM template
         uses: actions/upload-artifact@v4
         with:
