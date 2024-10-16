@@ -87,8 +87,8 @@ jobs:
           done
           
           # Copy modified files back to original location
-          cp ARMTemplateForFactory.json $GITHUB_WORKSPACE/armTemplate/
-          cp ARMTemplateParametersForFactory.json $GITHUB_WORKSPACE/armTemplate/
+          cp ARMTemplateForFactory.json ./armTemplate/
+          cp ARMTemplateParametersForFactory.json ./armTemplate/
           
           # Clean up
           cd $GITHUB_WORKSPACE
