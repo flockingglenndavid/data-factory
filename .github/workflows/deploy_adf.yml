@@ -67,9 +67,11 @@ jobs:
         if: ${{ inputs.overwrite_references }}
         run: |
           # Create a temporary directory
+          echo "Create a temporary directory"
           TEMP_DIR=$(mktemp -d)
           
           # Copy files to temporary directory
+          echo "Copy files to temporary directory"
           cp ./armTemplate/ARMTemplateForFactory.json $TEMP_DIR/
           cp ./armTemplate/ARMTemplateParametersForFactory.json $TEMP_DIR/
           cp env_mappings.json $TEMP_DIR/
@@ -87,8 +89,9 @@ jobs:
           done
           
           # Copy modified files back to original location
-          cp ARMTemplateForFactory.json ./armTemplate/
-          cp ARMTemplateParametersForFactory.json ./armTemplate/
+          echo "Copy modified files back to original location"
+          cp ARMTemplateForFactory.json ./armTemplate/ARMTemplateForFactory.json
+          cp ARMTemplateParametersForFactory.json ./armTemplate/ARMTemplateParametersForFactory.json
           
           # Clean up
           cd $GITHUB_WORKSPACE
