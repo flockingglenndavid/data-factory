@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
 	"name": "pipeline1",
 	"properties": {
@@ -64,3 +65,6 @@
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }
+=======
+
+>>>>>>> main
