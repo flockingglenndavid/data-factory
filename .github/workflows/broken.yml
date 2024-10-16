@@ -1,0 +1,26 @@
+name: ReleaseToProd
+on:
+    workflow_dispatch:
+      inputs:
+        environment:
+          description: 'Target environment'
+          required: true
+          default: 'production'
+permissions:
+  id-token: write
+  contents: write
+jobs:
+  deploy_prod:
+    name: DeployToPROD
+    uses: ./.github/workflows/deploy_adf.yml
+    with:
+      resource_group: 'gd-test-asa-rg'
+      data_factory: 'gd-prod-df'
+      target_data_factory: 'gd-prod-df'
+      target_resource_group: 'gd-test-asa-rg'
+      pause_triggers: false
+      overwrite_references: false
+    secrets:
+      client_id: ${{ secrets.AZURE_CLIENT_ID }}
+      tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+      subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
